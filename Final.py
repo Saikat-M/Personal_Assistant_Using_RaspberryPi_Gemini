@@ -25,7 +25,6 @@ async def recognize_speech():
     text = ''
     with mic as source:
         print('Say Sommething')
-        # r.adjust_for_ambient_noise(source)
         audio = r.listen(source)
         print("Audio: ", audio)
         text = r.recognize_whisper_api(audio, api_key="YOUR_API_KEY")
@@ -42,8 +41,9 @@ async def main():
     #For Speechio
     speech = SpeechService.from_robot(robot, name="speech")
     
+
     api_key = "YOUR_API_KEY"
-    print(api_key)
+    #print(api_key)
     genai.configure(api_key=api_key)
 
     #Chat model
@@ -61,12 +61,14 @@ async def main():
         img = await my_camera.get_image(mime_type="image/jpeg")
         detections = await myPeopleDetector.get_detections(img)
 
+        #detecting person based on curstom threshold value
         found = False
         for d in detections:
             if d.confidence > 0.5 and d.class_name.lower() == "person":
                 print("This is a person!")
                 found = True
         
+        #the interaction mode starts from here if the system founds someone
         while (found):
             await speech.say('Hello There, How May I helpyou today?', True)
             print('Ready To Listen to know...........')
@@ -76,6 +78,7 @@ async def main():
 
             #Chat loop
             if 'tell me' in user_input.lower():
+                #constructing the prompt for chat model
                 prompt = answer_criteria + "question: " + user_input
                 print("Prompt: ", prompt)
                 response = chat.send_message(prompt)
@@ -96,15 +99,13 @@ async def main():
                         print("Follow_up Prompt: ", follow_up_prompt)
                         response = chat.send_message(follow_up_prompt)
                         if len(response.text) > 0:
-                            await speech.say(response.text, True)
-                            #await speech.say("Now we will go back to the main menu.", True) 
-                            #break
+                            await speech.say(response.text, True) #continues the follow-up loop
                     elif "no" in follow_up_input.lower():
                         await speech.say("Cool. Will go back to our main Menu.", True)
-                        break
+                        break #breaks the follow-up loop
                     else:
                         await speech.say("Sorry, I didn't understand. Going back to main menu", True)
-                        break
+                        break #breaks the follow-up loop
 
             #vision loop  
             elif 'picture' in user_input.lower():
@@ -126,21 +127,22 @@ async def main():
                         model = genai.GenerativeModel('gemini-1.0-pro-latest')
                         # chat model instance for follow-up questions for the taken image 
                         chatImageInstance = model.start_chat()
+
+                        #adds the previous response to the prompt to facilitates follow-up questions for the given image input
                         image_answer_criteria = "previous response: " + response.text+ "Use the context to answer the question. If answer can not found from the context you can use your knowledge to answer the question." + answer_criteria
                         follow_up_prompt = image_answer_criteria + "question: " + follow_up_input
                         print("Follow_up Prompt: ", follow_up_prompt)
                         response = chatImageInstance.send_message(follow_up_prompt)
                         if len(response.text) > 0:
-                            await speech.say(response.text, True)
-                            #await speech.say("Now we will go back to the main menu.", True) 
-                            #break
+                            await speech.say(response.text, True) #continues the follow-up loop
                     elif "no" in follow_up_input.lower():
                         await speech.say("Cool. Will go back to our main Menu.", True)
-                        break
+                        break #breaks the follow-up loop
                     else:
                         await speech.say("Sorry, I didn't understand. Going back to main menu", True)
-                        break
+                        break #breaks the follow-up loop
 
+            #end of interaction                
             else:
                 await speech.say("Cool. Hope you have a great rest of the day", True)
                 break	

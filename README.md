@@ -34,6 +34,7 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
 8. It greets the user.
 9. It listens for user input using `recognize_speech` function.
     A. `Normal Chat Mode`: If it recognizes `tell me` in user input:
+   
         1. Constructs a prompt for the chat model with the user's question and answer criteria.
         2. Sends the prompt to the chat model and receives a response.
         3. Speaks the response back to the user.
@@ -43,13 +44,16 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
             C. If the user's response is unclear, it apologizes and restarts the main loop.
 
     B. `Image Chat Mode`:  If it recognizes `picture` in user input:
+   
         1. It captures an image from the camera.
         2. It uses `visionModel` to analyze the image and generate a description.
         3. It speaks the description back to the user.
         4. It enters a follow-up loop similar to the chat interaction but uses a new chat model instance `chatImageInstance` specifically for questions related to the captured  image. This instance utilizes the previous response from the vision model for context and to answer follow-up question rearding the image.
 
-    C.  `End of Interaction`: For anything else the system assumes the user doesn't need further assistance in either chat or image analysis interaction loops, the it says goodbye and breaks the main loop.
+    C.  `End of Interaction`:
+
+        For anything else the system assumes the user doesn't need further assistance in either chat or image analysis interaction loops, the it says goodbye and breaks the main loop.
     
-10. Cleanup:
+11. Cleanup:
 
     A. Finally, the main function closes the connection to the robot.

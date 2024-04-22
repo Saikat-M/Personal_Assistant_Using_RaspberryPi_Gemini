@@ -11,22 +11,28 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
 3. Main Loop:
 
     A. Here It connects to the robot and retrieves references to the camera(`cam`), vision detector (`myPeopleDetector`), and the speech service (`speech`) from Viam.
+
     B. It configures the Google GenerativeAI library with the provided API key.
+
     C. It creates two instances of generative models:
         chat: `gemini-1.0-pro-latest` model for text chat.
         visionModel: `gemini-pro-vision` model for image analysis.
+
     D. From here the execution enters into a infinite loop of person detection.
 
-4. Person Detection:
+5. Person Detection:
 
     A. Here it continues look for people until it founds someone to enter into the interaction stage.
+
     B. It captures an image from the camera.
+
     C. It uses `myPeopleDetecto`r to analyze the image for people.
+
     D. If a person is detected with confidence above `50%`
 
-5. After the robot detects a person that satisfy the condition for the above mentioned confidance score, It enters into the Interaction mode.
-6. It greets the user.
-7. It listens for user input using `recognize_speech` function.
+7. After the robot detects a person that satisfy the condition for the above mentioned confidance score, It enters into the Interaction mode.
+8. It greets the user.
+9. It listens for user input using `recognize_speech` function.
     A. `Normal Chat Mode`: If it recognizes `tell me` in user input:
         1. Constructs a prompt for the chat model with the user's question and answer criteria.
         2. Sends the prompt to the chat model and receives a response.
@@ -36,8 +42,7 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
             B. If no, it says goodbye and breaks the follow-up loop.
             C. If the user's response is unclear, it apologizes and restarts the main loop.
 
-    B. `Image Chat Mode`:  If it recognizes `picture` in user input
-
+    B. `Image Chat Mode`:  If it recognizes `picture` in user input:
         1. It captures an image from the camera.
         2. It uses `visionModel` to analyze the image and generate a description.
         3. It speaks the description back to the user.
@@ -45,6 +50,6 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
 
     C.  `End of Interaction`: For anything else the system assumes the user doesn't need further assistance in either chat or image analysis interaction loops, the it says goodbye and breaks the main loop.
     
-8. Cleanup:
+10. Cleanup:
 
     A. Finally, the main function closes the connection to the robot.

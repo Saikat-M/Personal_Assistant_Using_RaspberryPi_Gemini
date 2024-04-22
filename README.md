@@ -33,6 +33,7 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
 7. After the robot detects a person that satisfy the condition for the above mentioned confidance score, It enters into the Interaction mode.
 8. It greets the user.
 9. It listens for user input using `recognize_speech` function.
+    
     A. `Normal Chat Mode`: If it recognizes `tell me` in user input:
    
         1. Constructs a prompt for the chat model with the user's question and answer criteria.

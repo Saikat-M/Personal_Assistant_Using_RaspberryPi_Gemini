@@ -5,9 +5,10 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
 1. Setup and Connection:
 
     A. Connect function establishes a connection with the robot using the provided API key and ID.
+
     B. `recognize_speech` function uses `speech_recognition` to capture user speech through the microphone and attempts to recognize it using `recognize_whisper_api`.
 
-2. Main Loop:
+3. Main Loop:
 
     A. Here It connects to the robot and retrieves references to the camera(`cam`), vision detector (`myPeopleDetector`), and the speech service (`speech`) from Viam.
     B. It configures the Google GenerativeAI library with the provided API key.
@@ -16,16 +17,16 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
         visionModel: `gemini-pro-vision` model for image analysis.
     D. From here the execution enters into a infinite loop of person detection.
 
-3. Person Detection:
+4. Person Detection:
 
     A. Here it continues look for people until it founds someone to enter into the interaction stage.
     B. It captures an image from the camera.
     C. It uses `myPeopleDetecto`r to analyze the image for people.
     D. If a person is detected with confidence above `50%`
 
-4. After the robot detects a person that satisfy the condition for the above mentioned confidance score, It enters into the Interaction mode.
-5. It greets the user.
-6. It listens for user input using `recognize_speech` function.
+5. After the robot detects a person that satisfy the condition for the above mentioned confidance score, It enters into the Interaction mode.
+6. It greets the user.
+7. It listens for user input using `recognize_speech` function.
     A. `Normal Chat Mode`: If it recognizes `tell me` in user input:
         1. Constructs a prompt for the chat model with the user's question and answer criteria.
         2. Sends the prompt to the chat model and receives a response.
@@ -44,6 +45,6 @@ Personal Assistant using Raspberry Pi, Viam SDK and Gemini API
 
     C.  `End of Interaction`: For anything else the system assumes the user doesn't need further assistance in either chat or image analysis interaction loops, the it says goodbye and breaks the main loop.
     
-7. Cleanup:
+8. Cleanup:
 
     A. Finally, the main function closes the connection to the robot.
